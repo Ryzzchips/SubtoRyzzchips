@@ -1,0 +1,79 @@
+ local camViewportSize =
+
+Cam.ViewportSize
+
+FOVring.Position = camViewportSize / 2
+
+end
+
+local function onKeyDown(input)
+
+if input.KeyCode == Enum.KeyCode.Delete then
+
+RunService:UnbindFromRenderStep("FOVUpd ate")
+
+FOVring:Remove()
+
+end
+
+end
+
+UserInputService.InputBegan:Connect(onKey Down)
+
+local function lookAt(target)
+
+local lookVector = (target -Cam.CFrame.Position).unit
+
+local newCFrame = CFrame.new(Cam.CFrame.Position, Cam.CFrame.Position + lookVector) Cam.CFrame = newCFrame
+
+end
+
+local function
+
+getClosestPlayerInFOV(trg_part)
+
+local nearest = nil
+
+local last = math.huge
+
+local playerMousePos =
+
+Cam.ViewportSize / 2
+
+for, player in ipairs (Players:GetPlayers())
+
+do
+
+if player ~= Players.LocalPlayer then local part = player. Character and player.Character:FindFirstChild(trg_part)
+
+if part thenlocal ePos, IsVisible = Cam:WorldToViewportPoint(part.Position) local distance = (Vector2.new(ePos.x, ePos.y) - playerMousePos).Magnitude
+
+if distance < last and isVisible and distance < fov then
+
+last = distance
+
+nearest = player
+
+end
+
+end
+
+end
+
+end
+
+return nearest end
+
+RunService.RenderStepped:Connect(function( )updateDrawings()
+
+local closest =
+
+getClosestPlayerInFOV("Head")
+
+if closest and
+
+closest.Character:FindFirstChild("Head") then lookAt(closest.Character.Head.Position)
+
+end
+
+end)
